@@ -11,6 +11,14 @@ import android.util.Log;
 import com.bignerdranch.android.runtracker.RunDatabaseHelper.LocationCursor;
 import com.bignerdranch.android.runtracker.RunDatabaseHelper.RunCursor;
 
+/**
+ * Singleton class that manages the communication with the {@link LocationManager} and details about
+ * the current run.
+ *
+ * @author Bill Phillips
+ * @author Brian Hardy
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
+ */
 public class RunManager {
     private static final String TAG = "RunManager";
 
@@ -36,9 +44,16 @@ public class RunManager {
         mCurrentRunId = mPrefs.getLong(PREF_CURRENT_RUN_ID, -1);
     }
 
+    /**
+     * Gets the singleton {@code RunManager} instance. If no instance currently exists, creates a
+     * new {@link RunManager} instance for the given context.
+     *
+     * @param c the context for the {@code RunManager}
+     * @return the current {@code RunManager} instance
+     */
     public static RunManager get(Context c) {
         if (sRunManager == null) {
-            // we use the application context to avoid leaking activities
+            // We use the application context to avoid leaking activities.
             sRunManager = new RunManager(c.getApplicationContext());
         }
         return sRunManager;
@@ -50,27 +65,33 @@ public class RunManager {
         return PendingIntent.getBroadcast(mAppContext, 0, broadcast, flags);
     }
 
+    /**
+     * Request to start receiving location updates from the {@link LocationManager}.
+     */
     public void startLocationUpdates() {
         String provider = LocationManager.GPS_PROVIDER;
-        // if we have the test provider and it's enabled, use it
+        // If we have the test provider and it's enabled, use it.
         if (mLocationManager.getProvider(TEST_PROVIDER) != null &&
                 mLocationManager.isProviderEnabled(TEST_PROVIDER)) {
             provider = TEST_PROVIDER;
         }
         Log.d(TAG, "Using provider " + provider);
 
-        // get the last known location and broadcast it if we have one
+        // Get the last known location and broadcast it if we have one.
         Location lastKnown = mLocationManager.getLastKnownLocation(provider);
         if (lastKnown != null) {
-            // reset the time to now
+            // Reset the time to now.
             lastKnown.setTime(System.currentTimeMillis());
             broadcastLocation(lastKnown);
         }
-        // start updates from the location manager
+        // Start updates from the location manager.
         PendingIntent pi = getLocationPendingIntent(true);
         mLocationManager.requestLocationUpdates(provider, 0, 0, pi);
     }
 
+    /**
+     * Request to stop receiving location updates from the {@link LocationManager}.
+     */
     public void stopLocationUpdates() {
         PendingIntent pi = getLocationPendingIntent(false);
         if (pi != null) {
@@ -79,10 +100,22 @@ public class RunManager {
         }
     }
 
+    /**
+     * Determine whether a {@link Run} is currently being tracked.
+     *
+     * @return {@code true}, if a run is currently being tracked; otherwise {@code false}
+     */
     public boolean isTrackingRun() {
         return getLocationPendingIntent(false) != null;
     }
 
+    /**
+     * Determine whether the given {@link Run} is being currently tracked by the {@code RunManager}.
+     *
+     * @param run the run to check
+     * @return {@code true} if the given {@link Run} is currently being tracked; otherwise
+     *         {@code false}
+     */
     public boolean isTrackingRun(Run run) {
         return run != null && run.getId() == mCurrentRunId;
     }
@@ -93,20 +126,30 @@ public class RunManager {
         mAppContext.sendBroadcast(broadcast);
     }
 
+    /**
+     * Start a new run, and begin tracking (receiving current location updates for) that run.
+     *
+     * @return the newly started run
+     */
     public Run startNewRun() {
-        // insert a run into the db
+        // Insert a run into the dB.
         Run run = insertRun();
-        // start tracking the run
+        // Start tracking the run.
         startTrackingRun(run);
         return run;
     }
 
+    /**
+     * Begin tracking the current location as part of the given run.
+     *
+     * @param run the run to track
+     */
     public void startTrackingRun(Run run) {
-        // keep the ID
+        // Keep the ID.
         mCurrentRunId = run.getId();
-        // store it in shared preferences
+        // Store the ID in shared preferences.
         mPrefs.edit().putLong(PREF_CURRENT_RUN_ID, mCurrentRunId).commit();
-        // start location updates
+        // Start location updates.
         startLocationUpdates();
     }
 
@@ -122,21 +165,38 @@ public class RunManager {
         return run;
     }
 
+    /**
+     * Gets a cursor for all of the runs currently in the database.
+     *
+     * @return a cursor for the runs currently stored in the Run database
+     */
     public RunCursor queryRuns() {
         return mHelper.queryRuns();
     }
 
+    /**
+     * Gets the run with the given ID, if any exists
+     *
+     * @param id the ID of the run to get
+     * @return the run with the given ID, if such exists; otherwise {@code null}
+     */
     public Run getRun(long id) {
         Run run = null;
         RunCursor cursor = mHelper.queryRun(id);
         cursor.moveToFirst();
-        // if we got a row, get a run
-        if (!cursor.isAfterLast())
+        // If we got a row, get a run.
+        if (!cursor.isAfterLast()) {
             run = cursor.getRun();
+        }
         cursor.close();
         return run;
     }
 
+    /**
+     * Inserts the given location into the database as part of the current run.
+     *
+     * @param loc the location to insert
+     */
     public void insertLocation(Location loc) {
         if (mCurrentRunId != -1) {
             mHelper.insertLocation(mCurrentRunId, loc);
@@ -145,15 +205,21 @@ public class RunManager {
         }
     }
 
+    /**
+     * Gets the last location associated with the run with the given ID
+     *
+     * @param runId the ID of the run to query
+     * @return the last location of the run with the given ID, if such exists
+     */
     public Location getLastLocationForRun(long runId) {
         Location location = null;
         LocationCursor cursor = mHelper.queryLastLocationForRun(runId);
         cursor.moveToFirst();
-        // if we got a row, get a location
-        if (!cursor.isAfterLast())
+        // If we got a row, get a location.
+        if (!cursor.isAfterLast()) {
             location = cursor.getLocation();
+        }
         cursor.close();
         return location;
     }
-
 }
