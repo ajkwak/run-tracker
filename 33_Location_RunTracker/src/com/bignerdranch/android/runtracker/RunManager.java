@@ -153,6 +153,9 @@ public class RunManager {
         startLocationUpdates();
     }
 
+    /**
+     * Stop the current run.
+     */
     public void stopRun() {
         stopLocationUpdates();
         mCurrentRunId = -1;
