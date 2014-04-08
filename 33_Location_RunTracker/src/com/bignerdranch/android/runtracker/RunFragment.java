@@ -116,6 +116,8 @@ public class RunFragment extends Fragment {
             }
         });
 
+        // If this is a new run, stop any previous runs (thereby allowing this new run to be
+        // startable).
         if (mRun == null) {
             mRunManager.stopRun();
         }
