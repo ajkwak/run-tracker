@@ -71,11 +71,9 @@ public class RunListFragment extends ListFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (REQUEST_NEW_RUN == requestCode) {
-            Log.d(TAG, "onActivityResult(): REQUEST_NEW_RUN");
             mCursor.requery();
             ((RunCursorAdapter) getListAdapter()).notifyDataSetChanged();
         } else if (VIEW_CURRENT_RUN == requestCode) {
-            Log.d(TAG, "onActivityResult(): VIEW_CURRENT_RUN");
             ((RunCursorAdapter) getListAdapter()).notifyDataSetChanged();
         }
     }
@@ -112,9 +110,11 @@ public class RunListFragment extends ListFragment {
             // Set up the start date text view.
             TextView startDateTextView = (TextView) view;
             String cellText = context.getString(R.string.cell_text, run.getStartDate());
-            Log.d(TAG, "bindView(), cellText = " + cellText);
             if (RunManager.get(context).isTrackingRun(run)) {
                 cellText = "[Tracking] " + cellText;
+                startDateTextView.setTextColor(0xFF00CC00 /* green */);
+            } else {
+                startDateTextView.setTextColor(0xFF000000 /* black */);
             }
             startDateTextView.setText(cellText);
         }
