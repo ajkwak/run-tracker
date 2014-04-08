@@ -13,6 +13,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Fragment to display information about a single run.
+ *
+ * @author Bill Phillips
+ * @author Brian Hardy
+ * @author ajkwak@users.noreply.github.com (AJ Parmidge)
+ */
 public class RunFragment extends Fragment {
     private static final String TAG = "RunFragment";
 
