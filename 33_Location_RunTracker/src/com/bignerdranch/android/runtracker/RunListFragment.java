@@ -28,6 +28,7 @@ import com.bignerdranch.android.runtracker.RunDatabaseHelper.RunCursor;
 public class RunListFragment extends ListFragment {
     private static final String TAG = "RunListFragment";
     private static final int REQUEST_NEW_RUN = 0;
+    private static final int VIEW_CURRENT_RUN = 1;
 
     private RunCursor mCursor;
 
@@ -70,7 +71,11 @@ public class RunListFragment extends ListFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (REQUEST_NEW_RUN == requestCode) {
+            Log.d(TAG, "onActivityResult(): REQUEST_NEW_RUN");
             mCursor.requery();
+            ((RunCursorAdapter) getListAdapter()).notifyDataSetChanged();
+        } else if (VIEW_CURRENT_RUN == requestCode) {
+            Log.d(TAG, "onActivityResult(): VIEW_CURRENT_RUN");
             ((RunCursorAdapter) getListAdapter()).notifyDataSetChanged();
         }
     }
@@ -80,7 +85,7 @@ public class RunListFragment extends ListFragment {
         // the id argument will be the Run ID; CursorAdapter gives us this for free
         Intent i = new Intent(getActivity(), RunActivity.class);
         i.putExtra(RunActivity.EXTRA_RUN_ID, id);
-        startActivity(i);
+        startActivityForResult(i, VIEW_CURRENT_RUN);
     }
 
     private static class RunCursorAdapter extends CursorAdapter {
@@ -107,6 +112,10 @@ public class RunListFragment extends ListFragment {
             // Set up the start date text view.
             TextView startDateTextView = (TextView) view;
             String cellText = context.getString(R.string.cell_text, run.getStartDate());
+            Log.d(TAG, "bindView(), cellText = " + cellText);
+            if (RunManager.get(context).isTrackingRun(run)) {
+                cellText = "[Tracking] " + cellText;
+            }
             startDateTextView.setText(cellText);
         }
     }
