@@ -116,6 +116,9 @@ public class RunFragment extends Fragment {
             }
         });
 
+        if (mRun == null) {
+            mRunManager.stopRun();
+        }
         updateUI();
 
         return view;
