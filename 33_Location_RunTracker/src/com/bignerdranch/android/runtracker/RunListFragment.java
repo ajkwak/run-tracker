@@ -1,9 +1,11 @@
 package com.bignerdranch.android.runtracker;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
@@ -63,9 +65,35 @@ public class RunListFragment extends ListFragment {
             Intent i = new Intent(getActivity(), RunActivity.class);
             startActivityForResult(i, REQUEST_NEW_RUN);
             return true;
+        case R.id.menu_item_run_status:
+            AlertDialog runStatusDialog = createRunStatusDialog();
+            runStatusDialog.show();
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private AlertDialog createRunStatusDialog() {
+        FragmentActivity runListActivity = getActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(runListActivity);
+        builder.setTitle(R.string.run_status);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.ok, null);
+
+        // Create the dialog's message:
+        RunManager runManager = RunManager.get(runListActivity);
+        Run currentRun = runManager.getCurrentRun();
+        String currentRunString = currentRun == null
+                ? "<<NONE>>"
+                : getString(R.string.cell_text, currentRun.getStartDate());
+        String currentRunStatusString = runManager.isTrackingRun()
+                ? getString(R.string.run_status_started)
+                : getString(R.string.run_status_stopped);
+        builder.setMessage(getString(R.string.run_status_dialog_text, currentRunString,
+                currentRunStatusString));
+
+        return builder.create();
     }
 
     @Override

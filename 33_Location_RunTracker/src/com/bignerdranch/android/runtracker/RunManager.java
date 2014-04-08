@@ -196,6 +196,15 @@ public class RunManager {
     }
 
     /**
+     * Gets the current run, if there is one
+     *
+     * @return the current run, or {@code null}, if no current run exists
+     */
+    public Run getCurrentRun() {
+        return getRun(mCurrentRunId);
+    }
+
+    /**
      * Inserts the given location into the database as part of the current run.
      *
      * @param loc the location to insert

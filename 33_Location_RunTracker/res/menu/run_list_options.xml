@@ -4,4 +4,7 @@
         android:showAsAction="always"
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/new_run"/>
+    <item android:id="@+id/menu_item_run_status"
+        android:showAsAction="always"
+        android:title="@string/run_status"/>
 </menu>
