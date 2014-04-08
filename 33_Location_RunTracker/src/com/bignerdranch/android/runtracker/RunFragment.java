@@ -79,6 +79,7 @@ public class RunFragment extends Fragment {
             long runId = args.getLong(ARG_RUN_ID, -1);
             if (runId != -1) {
                 mRun = mRunManager.getRun(runId);
+                mLastLocation = mRunManager.getLastLocationForRun(runId);
             }
         }
     }
