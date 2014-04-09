@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,7 +55,6 @@ public class RunListFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        Log.d(TAG, "create options menu");
         inflater.inflate(R.menu.run_list_options, menu);
     }
 
@@ -64,7 +62,6 @@ public class RunListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_item_new_run:
-            Log.d(TAG, "Requested new run");
             Intent i = new Intent(getActivity(), RunActivity.class);
             startActivityForResult(i, REQUEST_NEW_RUN);
             return true;
@@ -112,7 +109,6 @@ public class RunListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // The id argument will be the Run ID; CursorAdapter gives us this for free.
-        Log.d(TAG, "Clicked on run with ID = " + id);
         Intent i = new Intent(getActivity(), RunActivity.class);
         i.putExtra(RunActivity.EXTRA_RUN_ID, id);
         startActivityForResult(i, VIEW_CURRENT_RUN);
