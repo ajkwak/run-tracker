@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class RunFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        Log.d(TAG, "Creating new RunFragment.  setRetainInstance = true");
         mRunManager = RunManager.get(getActivity());
         // Check for a Run ID as an argument, and find the run.
         Bundle args = getArguments();

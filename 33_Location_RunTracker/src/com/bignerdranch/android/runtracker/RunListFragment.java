@@ -38,8 +38,10 @@ public class RunListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
         // Query the list of runs.
         mCursor = RunManager.get(getActivity()).queryRuns();
+
         // Create an adapter to point at this cursor.
         RunCursorAdapter adapter = new RunCursorAdapter(getActivity(), mCursor);
         setListAdapter(adapter);
@@ -62,6 +64,7 @@ public class RunListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_item_new_run:
+            Log.d(TAG, "Requested new run");
             Intent i = new Intent(getActivity(), RunActivity.class);
             startActivityForResult(i, REQUEST_NEW_RUN);
             return true;
@@ -108,7 +111,8 @@ public class RunListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        // the id argument will be the Run ID; CursorAdapter gives us this for free
+        // The id argument will be the Run ID; CursorAdapter gives us this for free.
+        Log.d(TAG, "Clicked on run with ID = " + id);
         Intent i = new Intent(getActivity(), RunActivity.class);
         i.putExtra(RunActivity.EXTRA_RUN_ID, id);
         startActivityForResult(i, VIEW_CURRENT_RUN);

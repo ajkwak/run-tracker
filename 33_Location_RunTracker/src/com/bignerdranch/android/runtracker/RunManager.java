@@ -84,6 +84,7 @@ public class RunManager {
             lastKnown.setTime(System.currentTimeMillis());
             broadcastLocation(lastKnown);
         }
+
         // Start updates from the location manager.
         PendingIntent pi = getLocationPendingIntent(true);
         mLocationManager.requestLocationUpdates(provider, 0, 0, pi);
@@ -134,6 +135,7 @@ public class RunManager {
     public Run startNewRun() {
         // Insert a run into the dB.
         Run run = insertRun();
+
         // Start tracking the run.
         startTrackingRun(run);
         return run;
@@ -145,10 +147,11 @@ public class RunManager {
      * @param run the run to track
      */
     public void startTrackingRun(Run run) {
-        // Keep the ID.
-        mCurrentRunId = run.getId();
+        mCurrentRunId = run.getId(); // Keep the ID.
+
         // Store the ID in shared preferences.
         mPrefs.edit().putLong(PREF_CURRENT_RUN_ID, mCurrentRunId).commit();
+
         // Start location updates.
         startLocationUpdates();
     }
@@ -187,6 +190,7 @@ public class RunManager {
         Run run = null;
         RunCursor cursor = mHelper.queryRun(id);
         cursor.moveToFirst();
+
         // If we got a row, get a run.
         if (!cursor.isAfterLast()) {
             run = cursor.getRun();
@@ -227,6 +231,7 @@ public class RunManager {
         Location location = null;
         LocationCursor cursor = mHelper.queryLastLocationForRun(runId);
         cursor.moveToFirst();
+
         // If we got a row, get a location.
         if (!cursor.isAfterLast()) {
             location = cursor.getLocation();
