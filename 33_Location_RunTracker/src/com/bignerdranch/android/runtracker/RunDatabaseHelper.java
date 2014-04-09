@@ -139,8 +139,8 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * A convenience class to wrap a cursor that returns rows from the "run" table.
-     * The {@link getRun()} method will give you a Run instance representing the current row.
+     * A convenience class to wrap a cursor that returns rows from the "run" table. The
+     * {@link #getRun()} method will give you a Run instance representing the current row.
      */
     public static class RunCursor extends CursorWrapper {
 
@@ -168,8 +168,8 @@ public class RunDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * A convenience class to wrap a cursor that returns rows from the "location" table. The {@link
-     * getLocation()} method will give you a Location instance representing the current row.
+     * A convenience class to wrap a cursor that returns rows from the "location" table. The
+     * {@link #getLocation()} method will give you a Location instance representing the current row.
      */
     public static class LocationCursor extends CursorWrapper {
 
