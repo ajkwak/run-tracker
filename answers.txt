@@ -1,0 +1,8 @@
+AJ Parmidge
+Mobile Application Development
+Ellen Spertus
+Lab 8: RunTracker
+10 April 2014
+
+The writeup for this lab can be found at:
+     https://docs.google.com/a/mills.edu/document/d/1E7edJBWcdsraH1Vuz9Bv_DM-j2QL5mdl68AhwgRhHa8/edit
